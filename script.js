@@ -96,7 +96,6 @@ class ContactsApp extends Contacts {
             super.add(this.contactData);
             this.onAdd();
 
-            console.log(super.get());
         })
     }
 
@@ -136,7 +135,7 @@ class ContactsApp extends Contacts {
         this.fieldForButton.append(this.editButton, this.removeButton)
 
         this.fieldForContact.append(this.nameContact, this.emailContact,
-             this.addressContact, this.phoneContact, this.fieldForButton); 
+            this.addressContact, this.phoneContact, this.fieldForButton); 
              
         this.fieldForContact.setAttribute('id', this.id);
         this.id++;
@@ -147,71 +146,40 @@ class ContactsApp extends Contacts {
         this.buttonsEdit = document.querySelectorAll('.editButton');
 
         this.onRemove();
-        this.onEdit();
+        this.onEdit(this.nameContact, this.phoneContact, this.emailContact, this.addressContact);
        
     }
 
     onRemove() {
 
-        this.butttonsRemove.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
-                const containerParent = button.parentElement.parentElement;
+        this.removeButton.addEventListener('click', event => {
+            const {target} = event;
+            this.containerParent = target.closest('.container__fieldForContact')
+            this.containerParent.remove();
+            super.remove(+this.containerParent.id)
 
-                containerParent.remove();
-                super.remove(+containerParent.id);
+       })
 
-            })
-        })
-
-
-        // не понимаю почему так не работает
-        // this.removeButton.addEventListener('click', (event) => {
-        //     event.preventDefault();
-
-        //     this.containerParent = this.removeButton.parentElement.parentElement;
-
-        //     this.containerParent.remove();
-        //     super.remove(+this.containerParent.id);
-
-        // })
     }
 
-    onEdit() {
+    onEdit(nameContact, phoneContact, emailContact, addressContact) {
 
-        console.log(this.buttonsEdit);
-        this.buttonsEdit.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
 
-                const newContact = {};
-                const containerParent = button.parentElement.parentElement;
+        this.editButton.addEventListener('click', (event) => {
+            event.preventDefault();
 
-                this.nameContact.innerHTML = newContact.name =  prompt('Name', this.nameContact.innerHTML)|| this.nameContact.innerHTML;
-                this.phoneContact.innerHTML = newContact.phone = prompt('Phone', this.phoneContact.innerHTML)|| this.phoneContact.innerHTML;
-                this.emailContact.innerHTML = newContact.email = prompt('Email', this.emailContact.innerHTML)|| this.emailContact.innerHTML;
-                this.addressContact.innerHTML = newContact.address = prompt('City', this.addressContact.innerHTML)|| this.addressContact.innerHTML;
-                
-                super.edit(+containerParent.id, newContact);
-                console.log(super.get());
-            })
+            const {target} = event;
+
+            const newContact = {};
+            const containerParent = target.closest('.container__fieldForContact')
+
+            nameContact.innerHTML = newContact.name =  prompt('Name', nameContact.innerHTML)|| nameContact.innerHTML;
+            phoneContact.innerHTML = newContact.phone = prompt('Phone', phoneContact.innerHTML)|| phoneContact.innerHTML;
+            emailContact.innerHTML = newContact.email = prompt('Email', emailContact.innerHTML) || emailContact.innerHTML;
+            addressContact.innerHTML = newContact.address = prompt('City', addressContact.innerHTML)|| addressContact.innerHTML;
+
+            super.edit(+containerParent.id, newContact);
         })
-
-        // this.editButton.addEventListener('click', (event) => {
-        //     event.preventDefault();
-
-        //     const newContact = {};
-        //     const containerParent = this.editButton.parentElement.parentElement;
-
-        //     this.nameContact.innerHTML = newContact.name =  prompt('Name', this.nameContact.innerHTML)|| this.nameContact.innerHTML;
-        //     this.phoneContact.innerHTML = newContact.phone = prompt('Phone', this.phoneContact.innerHTML)|| this.phoneContact.innerHTML;
-        //     this.emailContact.innerHTML = newContact.email = prompt('Email', this.emailContact.innerHTML)|| this.emailContact.innerHTML;
-        //     this.addressContact.innerHTML = newContact.address = prompt('City', this.addressContact.innerHTML)|| this.addressContact.innerHTML;
-
-        //     super.edit(+containerParent.id, newContact);
-        //     console.log(super.get());
-
-        // })
     }
 }
 
